@@ -1,7 +1,9 @@
+import RegisterForm from "../../components/registerForm/RegisterForm";
+
 const Register = () => {
   return (
-    <div>
-      <h1>This is the Register View</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <RegisterForm/>
     </div>
   );
 };
