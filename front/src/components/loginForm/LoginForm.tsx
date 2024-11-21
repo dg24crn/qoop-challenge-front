@@ -1,14 +1,19 @@
-// src/components/LoginForm.tsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login:', { email, password });
+
+    // Simular autenticación
+    login({ id: 1, firstName: "John", lastName: "Doe", email });
+    navigate("/dashboard");
   };
 
   return (
@@ -39,8 +44,8 @@ const LoginForm = () => {
       <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
         Login
       </button>
-      <Link to='/register'>
-        <p className='text-center p-4 underline text-blue-600'>Dont have an account?</p>
+      <Link to="/register">
+        <p className="text-center p-4 underline text-blue-600">Don't have an account?</p>
       </Link>
     </form>
   );

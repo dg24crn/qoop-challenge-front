@@ -1,14 +1,16 @@
-// src/components/RegisterForm.tsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
   });
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,7 +18,15 @@ const RegisterForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+
+    // Simular registro e iniciar sesión
+    login({
+      id: Math.random(),
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+    });
+    navigate("/dashboard");
   };
 
   return (
@@ -97,8 +107,8 @@ const RegisterForm = () => {
       >
         Register
       </button>
-      <Link to='/login'>
-        <p className='text-center p-4 underline text-blue-600'>Already have an account?</p>
+      <Link to="/login">
+        <p className="text-center p-4 underline text-blue-600">Already have an account?</p>
       </Link>
     </form>
   );
