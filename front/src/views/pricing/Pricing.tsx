@@ -30,6 +30,10 @@ const Pricing = () => {
     }
   };
 
+  const handleUpgradeToPremium = () => {
+    navigate("/pricing/payment");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
       <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
@@ -76,6 +80,8 @@ const Pricing = () => {
             <li>✔️ Assign tasks to team members</li>
             <li>✔️ Access external API</li>
           </ul>
+          {/* Precio del Plan */}
+          <p className="text-xl font-bold text-gray-800 mb-4">$4.99 / m</p>
           {user?.isSubscribed ? (
             <button
               className="bg-gray-500 text-white px-4 py-2 rounded-lg cursor-not-allowed"
@@ -84,7 +90,10 @@ const Pricing = () => {
               Current Plan
             </button>
           ) : (
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            <button
+              onClick={handleUpgradeToPremium}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
               Upgrade to Premium
             </button>
           )}
