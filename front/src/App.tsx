@@ -18,26 +18,24 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 
 function App() {
   return (
-    <div>
-      <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sandbox" element={<Sandbox />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/project/:id" element={<ProjectDetails />} />
-        </Routes>
-      </AuthProvider>
-    </div>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sandbox" element={<Sandbox />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/project/:id" element={<ProjectDetails />} />
+      </Routes>
+    </AuthProvider>
   );
 }
 

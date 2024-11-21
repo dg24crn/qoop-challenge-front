@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -8,12 +9,45 @@ const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Simular autenticación
-    login({ id: 1, firstName: "John", lastName: "Doe", email });
-    navigate("/dashboard");
+    try {
+      // Realizar la solicitud al endpoint de inicio de sesión
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/login",
+        new URLSearchParams({ username: email, password: password }), // Enviar como form-urlencoded
+        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+      );
+
+      const { access_token } = response.data;
+      console.log("Token recibido:", access_token); // Log del token recibido
+
+      // Realizar la solicitud para obtener los datos del usuario
+      const userResponse = await axios.get("http://127.0.0.1:8000/users/me", {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+
+      const userData = userResponse.data;
+      console.log("Datos del usuario:", userData); // Log de los datos del usuario
+
+      // Iniciar sesión con los datos del usuario
+      login(
+        {
+          id: userData.id,
+          firstName: userData.first_name,
+          lastName: userData.last_name,
+          email: userData.email,
+          isSubscribed: userData.is_subscribed,
+        },
+        access_token
+      );
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error durante el inicio de sesión:", error); // Log del error
+      alert("Invalid email or password. Please try again.");
+    }
   };
 
   return (

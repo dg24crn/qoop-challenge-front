@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -9,24 +9,39 @@ const RegisterForm = () => {
     email: "",
     password: "",
   });
-  const { login } = useAuth();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
+    setLoading(true);
 
-    // Simular registro e iniciar sesión
-    login({
-      id: Math.random(),
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-    });
-    navigate("/dashboard");
+    try {
+      // Llamada al endpoint de registro
+      await axios.post("http://127.0.0.1:8000/users", {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Redirigir al login tras un registro exitoso
+      navigate("/login");
+    } catch (error: any) {
+      setErrorMessage(
+        error.response?.data?.detail || "An error occurred during registration."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,6 +50,11 @@ const RegisterForm = () => {
       className="bg-white border border-gray-300 rounded-md p-6 shadow-md w-full max-w-sm mx-auto"
     >
       <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">Register</h2>
+
+      {/* Mostrar error */}
+      {errorMessage && (
+        <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+      )}
 
       {/* First Name */}
       <div className="mb-4">
@@ -103,10 +123,14 @@ const RegisterForm = () => {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className={`w-full py-2 px-4 rounded-md shadow-sm text-white ${
+          loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+        } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+        disabled={loading}
       >
-        Register
+        {loading ? "Registering..." : "Register"}
       </button>
+
       <Link to="/login">
         <p className="text-center p-4 underline text-blue-600">Already have an account?</p>
       </Link>

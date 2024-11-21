@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../../../context/AuthContext";
 
 const Sidebar: React.FC = () => {
-  const { user, toggleSubscription } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleCreateProject = () => {
     alert("Create New Project functionality goes here!");
@@ -75,27 +75,23 @@ const Sidebar: React.FC = () => {
         </button>
       </div>
 
-      {/* Manage Subscription */}
+      {/* Subscription Management */}
       <div className="mt-auto">
         <a
           href="/pricing"
           className="block text-center text-black underline mb-4"
         >
-          Manage Subscription
+          {user?.isSubscribed ? "Manage Subscription" : "Get Premium"}
         </a>
         <button
-          onClick={toggleSubscription}
-          className="bg-gray-500 rounded-lg py-2 px-4 mb-4 w-full text-white hover:bg-gray-600 transition"
+          onClick={logout}
+          className="bg-red-500 rounded-lg py-2 px-4 w-full text-white hover:bg-red-600 transition"
         >
-          Toggle Subscription
-        </button>
-        <button className="bg-red-500 rounded-lg py-2 px-4 w-full text-white hover:bg-red-600 transition">
           Log Out
         </button>
       </div>
     </div>
   );
-  
 };
 
 export default Sidebar;
