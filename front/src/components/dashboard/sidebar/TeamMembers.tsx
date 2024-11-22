@@ -14,51 +14,46 @@ interface Member {
 interface Team {
   id: number;
   name: string;
+  created_at: string;
+}
+
+interface Owner {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
 }
 
 const TeamMembers: React.FC = () => {
   const { user, token } = useAuth();
   const [members, setMembers] = useState<Member[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [team, setTeam] = useState<Team | null>(null); // Estado para el equipo
-  const [teamName, setTeamName] = useState<string>(""); // Input para crear un equipo
-  const [userIdToAdd, setUserIdToAdd] = useState<string>(""); // Input para agregar miembros
+  const [team, setTeam] = useState<Team | null>(null);
+  const [owner, setOwner] = useState<Owner | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [loadingRemove, setLoadingRemove] = useState<number | null>(null); // ID del miembro en proceso de eliminación
+  const [loading, setLoading] = useState<boolean>(true);
+  const [teamName, setTeamName] = useState<string>(""); // Para crear un equipo
+  const [userIdToAdd, setUserIdToAdd] = useState<string>(""); // Input para agregar miembros
 
-  // Obtener el equipo del usuario
-  const fetchTeam = async () => {
+  // Obtener el equipo al que pertenece el usuario
+  const fetchUserTeam = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/teams/by_owner/${user?.id}`,
+        `http://127.0.0.1:8000/teams/by_user/${user?.id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setTeam(response.data); // Guardar el equipo
-    } catch (error) {
-      console.error("No team found for user:", error);
-      setTeam(null); // Si no se encuentra, no hay equipo
+      setTeam(response.data.team);
+      setOwner(response.data.owner);
+      setMembers(response.data.members);
+    } catch (error: any) {
+      console.error("Error fetching user team:", error);
+      setTeam(null); // Aseguramos que `team` esté en null si no hay equipo
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Obtener miembros del equipo
-  const fetchTeamMembers = async () => {
-    if (!team) return; // Solo intentar si hay un equipo
-
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/teams/${team.id}/members`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setMembers(response.data);
-    } catch (error) {
-      console.error("Error fetching team members:", error);
     }
   };
 
@@ -79,7 +74,7 @@ const TeamMembers: React.FC = () => {
       );
       setTeam(response.data); // Guardar el equipo creado
       setTeamName("");
-      setSuccessMessage("Team created successfully!");
+      fetchUserTeam(); // Actualizar equipo después de crearlo
     } catch (error: any) {
       console.error("Error creating team:", error);
       setError("Failed to create the team.");
@@ -101,7 +96,7 @@ const TeamMembers: React.FC = () => {
         }
       );
       setUserIdToAdd("");
-      fetchTeamMembers(); // Actualizar miembros
+      fetchUserTeam(); // Actualizar miembros
       setSuccessMessage(response.data.message); // Mostrar el mensaje de éxito del backend
     } catch (error: any) {
       console.error("Error adding member:", error);
@@ -130,7 +125,7 @@ const TeamMembers: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      fetchTeamMembers(); // Actualizar miembros después de eliminar
+      fetchUserTeam(); // Actualizar miembros después de eliminar
       setSuccessMessage(response.data.message); // Mostrar el mensaje de éxito devuelto por el backend
     } catch (error: any) {
       console.error("Error removing member:", error);
@@ -143,14 +138,8 @@ const TeamMembers: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchTeam(); // Verificar si el equipo existe al cargar el componente
+    fetchUserTeam();
   }, [user, token]);
-
-  useEffect(() => {
-    if (team) {
-      fetchTeamMembers(); // Cargar miembros si hay equipo
-    }
-  }, [team]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -161,17 +150,25 @@ const TeamMembers: React.FC = () => {
       {team ? (
         <>
           <h3 className="text-xl font-bold mb-4 text-center">{team.name}</h3>
-          <h3 className="text-m font-bold mb-4">Team Members</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            Created At: {new Date(team.created_at).toLocaleDateString()}
+          </p>
+          <div className="mb-4">
+            <h4 className="text-md font-semibold">Team Owner</h4>
+            <p>
+              {owner?.first_name} {owner?.last_name} - {owner?.email}
+            </p>
+          </div>
           <div className="mb-4">
             <h4 className="text-md font-semibold mb-2">Add Member by ID</h4>
             <div className="flex gap-2">
               <input
-                type="number" // Aseguramos que solo acepte números
+                type="number"
                 value={userIdToAdd}
                 onChange={(e) => setUserIdToAdd(e.target.value)}
                 placeholder="Enter user ID"
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
-                min="0" // Evitar números negativos
+                min="0"
               />
               <button
                 onClick={addMember}
@@ -190,6 +187,7 @@ const TeamMembers: React.FC = () => {
               <p className="text-green-500 text-sm mt-2">{successMessage}</p>
             )}
           </div>
+          <h4 className="text-md font-semibold mb-2">Team Members</h4>
           {members.length > 0 ? (
             <ul>
               {members.map((member) => (
@@ -201,12 +199,12 @@ const TeamMembers: React.FC = () => {
                     {member.first_name} {member.last_name}
                   </span>
                   <span className="mx-4">{member.email}</span>
-                  <button
-                    onClick={() => removeMember(member.user_id)} // Asegúrate de usar el user_id
+                  {/*                   <button
+                    onClick={() => removeMember(member.id)} // Cambié member.user_id a member.id
                     className="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg"
                   >
                     REMOVE
-                  </button>
+                  </button> */}
                 </li>
               ))}
             </ul>
@@ -238,9 +236,6 @@ const TeamMembers: React.FC = () => {
             </button>
           </div>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-          {successMessage && (
-            <p className="text-green-500 text-sm mt-2">{successMessage}</p>
-          )}
         </div>
       )}
     </div>

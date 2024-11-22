@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
 import NasaApod from "../../apis/NasaApod";
 import TeamMembers from "./TeamMembers"; // Importar el nuevo componente
+import Members from "./Members";
 
 const Sidebar: React.FC = () => {
   const { user, logout, token } = useAuth();
@@ -63,9 +64,14 @@ const Sidebar: React.FC = () => {
         )}
       </div>
 
-      {/* Actions */}
+      {/*  Subscribed User */}
       <div className="flex flex-col gap-4">
         {user?.isSubscribed && <TeamMembers />} {/* Renderizar TeamMembers aquí */}
+      </div>
+
+      {/* Not Subscribed User */}
+      <div className="flex flex-col gap-4">
+        {!user?.isSubscribed && <Members />}
       </div>
 
       {/* API for Subscribed Users */}
