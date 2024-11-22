@@ -5,7 +5,7 @@ interface ApodData {
   title: string;
   explanation: string;
   url: string;
-  media_type: string; // Puede ser 'image' o 'video'
+  media_type: string;
 }
 
 const NasaApod: React.FC = () => {
@@ -21,7 +21,7 @@ const NasaApod: React.FC = () => {
           `https://api.nasa.gov/planetary/apod?api_key=zUda71neBvuVAGhOiGbaN8qiUAwZ2qppMRCSNhSo`
         );
         setData(response.data);
-      } catch (err) {
+      } catch {
         setError("Failed to fetch NASA APOD. Please try again later.");
       } finally {
         setLoading(false);
@@ -44,7 +44,7 @@ const NasaApod: React.FC = () => {
   }
 
   return (
-    <div className="p-4 border rounded-lg shadow-md bg-white">
+    <div className="p-2 border rounded-lg">
       <h2 className="text-lg font-semibold text-gray-800 text-center mb-4">
         {data.title}
       </h2>
@@ -62,7 +62,6 @@ const NasaApod: React.FC = () => {
           allowFullScreen
         ></iframe>
       )}
-      <p className="text-sm text-gray-700">{data.explanation}</p>
     </div>
   );
 };

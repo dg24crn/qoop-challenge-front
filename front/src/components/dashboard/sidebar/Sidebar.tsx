@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
+import NasaApod from "../../apis/NasaApod";
 
 const Sidebar: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, token } = useAuth();
+  const [subscriptionExpiration, setSubscriptionExpiration] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSubscriptionStatus = async () => {
+      if (!user || !token) return;
+
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/users/${user.id}/subscription-status`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setSubscriptionExpiration(response.data.subscription_expiration);
+      } catch (error) {
+        console.error("Error fetching subscription status:", error);
+      }
+    };
+
+    if (user?.isSubscribed) {
+      fetchSubscriptionStatus();
+    }
+  }, [user, token]);
 
   const handleCreateProject = () => {
     alert("Create New Project functionality goes here!");
@@ -26,7 +53,9 @@ const Sidebar: React.FC = () => {
             <p className="text-xl font-medium mb-1 text-center">
               {user.firstName} {user.lastName}
             </p>
-            <p className="text-sm text-gray-600 mb-2 text-center">{user.email}</p>
+            <p className="text-sm text-gray-600 mb-2 text-center">
+              {user.email}
+            </p>
             <p
               className={`text-sm font-semibold text-center ${
                 user.isSubscribed ? "text-green-500" : "text-red-500"
@@ -34,6 +63,12 @@ const Sidebar: React.FC = () => {
             >
               {user.isSubscribed ? "Active Subscription" : "No Subscription"}
             </p>
+            {user.isSubscribed && subscriptionExpiration && (
+              <p className="text-xs text-gray-700 text-center">
+                Exp. Date:{" "}
+                {new Date(subscriptionExpiration).toLocaleDateString()}
+              </p>
+            )}
           </div>
         )}
       </div>
@@ -73,6 +108,26 @@ const Sidebar: React.FC = () => {
         >
           Members
         </button>
+      </div>
+
+      {/* API for Subscribed Users */}
+      <div className="mt-auto border border-red-200 rounded-xl text-center h-64 relative overflow-hidden">
+        {user?.isSubscribed ? (
+          <NasaApod />
+        ) : (
+          <>
+            <div className="absolute inset-0">
+              <div className="w-full h-full blur-sm opacity-50">
+                <NasaApod />
+              </div>
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+              <p className="text-white font-semibold text-lg">
+                Subscribe to unlock this feature!
+              </p>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Subscription Management */}

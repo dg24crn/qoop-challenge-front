@@ -9,6 +9,8 @@ import Dashboard from "./views/dashboard/Dashboard";
 import ProjectDetails from "./views/project/ProjectDetails";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Payment from "./views/payment/Payment";
+import Monthly from "./views/monthly/Monthly";
+import Annually from "./views/annually/Annually";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -27,6 +29,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/pricing/payment" element={<Payment />} />
+        <Route path="/pricing/payment/monthly" element={<Monthly />} />
+        <Route path="/pricing/payment/annually" element={<Annually />} />
         <Route
           path="/dashboard"
           element={
