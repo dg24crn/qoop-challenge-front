@@ -31,14 +31,6 @@ const Sidebar: React.FC = () => {
     }
   }, [user, token]);
 
-  const handleCreateProject = () => {
-    alert("Create New Project functionality goes here!");
-  };
-
-  const handleManageProjects = () => {
-    alert("Manage Projects functionality goes here!");
-  };
-
   const handleManageMembers = () => {
     alert("Members management functionality goes here!");
   };
@@ -75,28 +67,6 @@ const Sidebar: React.FC = () => {
 
       {/* Actions */}
       <div className="flex flex-col gap-4">
-        <button
-          className={`rounded-lg py-2 px-4 text-white transition ${
-            user?.isSubscribed
-              ? "bg-blue-600 hover:bg-blue-500"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-          onClick={handleCreateProject}
-          disabled={!user?.isSubscribed}
-        >
-          Create New Project
-        </button>
-        <button
-          className={`rounded-lg py-2 px-4 text-white transition ${
-            user?.isSubscribed
-              ? "bg-blue-600 hover:bg-blue-500"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-          onClick={handleManageProjects}
-          disabled={!user?.isSubscribed}
-        >
-          Manage Projects
-        </button>
         <button
           className={`rounded-lg py-2 px-4 text-white transition ${
             user?.isSubscribed
