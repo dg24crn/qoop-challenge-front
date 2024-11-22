@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
 import NasaApod from "../../apis/NasaApod";
+import TeamMembers from "./TeamMembers"; // Importar el nuevo componente
 
 const Sidebar: React.FC = () => {
   const { user, logout, token } = useAuth();
@@ -31,10 +32,6 @@ const Sidebar: React.FC = () => {
     }
   }, [user, token]);
 
-  const handleManageMembers = () => {
-    alert("Members management functionality goes here!");
-  };
-
   return (
     <div className="w-1/4 bg-gradient-to-b from-[#f7f3e9] to-[#e8dfce] text-gray-800 flex flex-col p-6 shadow-lg">
       {/* User Info */}
@@ -45,8 +42,9 @@ const Sidebar: React.FC = () => {
             <p className="text-xl font-medium mb-1 text-center">
               {user.firstName} {user.lastName}
             </p>
+            <p className="text-sm text-gray-600 mb-1 text-center">{user.email}</p>
             <p className="text-sm text-gray-600 mb-2 text-center">
-              {user.email}
+              <strong>Your ID:</strong> {user.id}
             </p>
             <p
               className={`text-sm font-semibold text-center ${
@@ -67,17 +65,7 @@ const Sidebar: React.FC = () => {
 
       {/* Actions */}
       <div className="flex flex-col gap-4">
-        <button
-          className={`rounded-lg py-2 px-4 text-white transition ${
-            user?.isSubscribed
-              ? "bg-blue-600 hover:bg-blue-500"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-          onClick={handleManageMembers}
-          disabled={!user?.isSubscribed}
-        >
-          Members
-        </button>
+        {user?.isSubscribed && <TeamMembers />} {/* Renderizar TeamMembers aquí */}
       </div>
 
       {/* API for Subscribed Users */}
