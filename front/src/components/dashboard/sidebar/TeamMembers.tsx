@@ -33,10 +33,10 @@ const TeamMembers: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [teamName, setTeamName] = useState<string>(""); // Para crear un equipo
-  const [userIdToAdd, setUserIdToAdd] = useState<string>(""); // Input para agregar miembros
+  const [teamName, setTeamName] = useState<string>("");
+  const [userIdToAdd, setUserIdToAdd] = useState<string>("");
 
-  // Obtener el equipo al que pertenece el usuario
+  //* Obtener el equipo al que pertenece el usuario
   const fetchUserTeam = async () => {
     setLoading(true);
     setError(null);
@@ -52,13 +52,13 @@ const TeamMembers: React.FC = () => {
       setMembers(response.data.members);
     } catch (error: any) {
       console.error("Error fetching user team:", error);
-      setTeam(null); // Aseguramos que `team` esté en null si no hay equipo
+      setTeam(null);
     } finally {
       setLoading(false);
     }
   };
 
-  // Crear un equipo
+  //* Crear un equipo
   const createTeam = async () => {
     setError(null);
     setSuccessMessage(null);
@@ -73,18 +73,18 @@ const TeamMembers: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setTeam(response.data); // Guardar el equipo creado
+      setTeam(response.data);
       setTeamName("");
-      fetchUserTeam(); // Actualizar equipo después de crearlo
+      fetchUserTeam();
     } catch (error: any) {
       console.error("Error creating team:", error);
       setError("Failed to create the team.");
     }
   };
 
-  // Agregar un miembro al equipo
+  //* Agregar un miembro al equipo
   const addMember = async () => {
-    if (!team) return; // Solo intentar si hay un equipo
+    if (!team) return;
 
     setError(null);
     setSuccessMessage(null);
@@ -97,11 +97,10 @@ const TeamMembers: React.FC = () => {
         }
       );
       setUserIdToAdd("");
-      fetchUserTeam(); // Actualizar miembros
-      setSuccessMessage(response.data.message); // Mostrar el mensaje de éxito del backend
+      fetchUserTeam();
+      setSuccessMessage(response.data.message);
     } catch (error: any) {
       console.error("Error adding member:", error);
-      // Manejar el error si el usuario ya es miembro
       if (error.response?.status === 400 && error.response?.data?.detail) {
         setError(error.response.data.detail);
       } else {
@@ -110,10 +109,11 @@ const TeamMembers: React.FC = () => {
     }
   };
 
-  // Eliminar un miembro del equipo
+  //* Eliminar un miembro del equipo
+  //! Funcionalidad Descartada x Bug
   const removeMember = async (memberId: number) => {
     if (!team) {
-      setError("No team found."); // Validar que exista un equipo
+      setError("No team found.");
       return;
     }
 
@@ -126,8 +126,8 @@ const TeamMembers: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      fetchUserTeam(); // Actualizar miembros después de eliminar
-      setSuccessMessage(response.data.message); // Mostrar el mensaje de éxito devuelto por el backend
+      fetchUserTeam();
+      setSuccessMessage(response.data.message);
     } catch (error: any) {
       console.error("Error removing member:", error);
       if (error.response && error.response.data && error.response.data.detail) {

@@ -21,10 +21,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(
-    () => JSON.parse(localStorage.getItem("user") || "null") // Restaurar usuario desde localStorage
+    () => JSON.parse(localStorage.getItem("user") || "null")
   );
   const [token, setToken] = useState<string | null>(
-    () => localStorage.getItem("token") || null // Restaurar token desde localStorage
+    () => localStorage.getItem("token") || null
   );
 
   const login = (user: User, token: string) => {
@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const checkSession = async () => {
-    if (!token) return; // Si no hay token, salir
+    if (!token) return;
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   useEffect(() => {
-    checkSession(); // Verificar sesión al cargar la aplicación
+    checkSession();
   }, []);
 
   return (

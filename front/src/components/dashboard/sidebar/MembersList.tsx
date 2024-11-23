@@ -15,11 +15,11 @@ const MembersList: React.FC = () => {
         ...members,
         {
           id: members.length + 1,
-          name: "New Member", // Nombre genérico para miembros agregados sin nombre
+          name: "New Member",
           email: email,
         },
       ]);
-      setEmail(""); // Limpiar el campo después de agregar
+      setEmail("");
     }
   };
 

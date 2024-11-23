@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // Estado para manejar el loading
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -17,10 +17,10 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true); // Activar el estado de loading
+    setLoading(true);
 
     try {
-      // Realizar la solicitud al endpoint de inicio de sesión
+      //* Realizar la solicitud al endpoint de inicio de sesión
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/auth/login`,
         new URLSearchParams({ username: email, password: password }),
@@ -53,7 +53,7 @@ const LoginForm = () => {
       console.error("Error durante el inicio de sesión:", error);
       loginErrorAlert();
     } finally {
-      setLoading(false); // Desactivar el estado de loading
+      setLoading(false);
     }
   };
 

@@ -36,6 +36,10 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+              <Pricing/>
+              <Payment/>
+              <Monthly/>
+              <Annually/>
             </ProtectedRoute>
           }
         />

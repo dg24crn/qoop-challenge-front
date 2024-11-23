@@ -18,14 +18,14 @@ const Pricing = () => {
     try {
       if (!user || !token) return;
 
-      // Llamar al endpoint para cambiar la suscripción a free
+      //* Llamar al endpoint para cambiar la suscripción a free
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/users/${user.id}/unsubscribe`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Actualizar los datos del usuario
+      //* Actualizar los datos del usuario
       await checkSession();
       downgradeAlert()
       navigate("/dashboard");

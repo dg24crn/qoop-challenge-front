@@ -31,7 +31,7 @@ const Members: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Función para obtener los datos del equipo del usuario
+  //* Función para obtener los datos del equipo del usuario
   const fetchTeamData = async () => {
     setLoading(true);
     setError(null);

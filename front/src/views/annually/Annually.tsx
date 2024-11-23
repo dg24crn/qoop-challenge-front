@@ -40,14 +40,14 @@ const Annually: React.FC = () => {
     if (!user || !token) return;
 
     try {
-      // Llamar al endpoint para activar la suscripción anual
+      //* Llamar al endpoint para activar la suscripción anual
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/users/${user.id}/subscribe/annually`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Actualizar la sesión del usuario
+      //* Actualizar la sesión del usuario
       await checkSession();
       payAlert()
       navigate("/dashboard");

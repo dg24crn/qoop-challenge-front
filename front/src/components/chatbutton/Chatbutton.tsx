@@ -11,21 +11,21 @@ const ChatButton: React.FC = () => {
   return (
     <div
       className="fixed bottom-4 right-4"
-      style={{ zIndex: 1000 }} // Asegurar que el botón siempre esté visible
+      style={{ zIndex: 1000 }}
     >
       <button
         onClick={handleToggleChat}
         className="p-3 rounded-full"
         style={{
-          backgroundColor: "#35425e", // Color medio del botón
-          color: "#e1e3e6", // Texto claro
+          backgroundColor: "#35425e",
+          color: "#e1e3e6",
           transition: "background-color 0.3s ease",
         }}
         onMouseOver={(e) =>
-          (e.currentTarget.style.backgroundColor = "#586984") // Hover más oscuro
+          (e.currentTarget.style.backgroundColor = "#586984")
         }
         onMouseOut={(e) =>
-          (e.currentTarget.style.backgroundColor = "#35425e") // Color inicial
+          (e.currentTarget.style.backgroundColor = "#35425e")
         }
       >
         🤖
@@ -34,8 +34,8 @@ const ChatButton: React.FC = () => {
         <div
           className="fixed bottom-16 right-4 w-80 shadow-lg rounded-lg p-4"
           style={{
-            backgroundColor: "#1c2a3b", // Fondo oscuro del contenedor
-            color: "#e1e3e6", // Texto claro
+            backgroundColor: "#1c2a3b",
+            color: "#e1e3e6",
           }}
         >
           <Chatbot />

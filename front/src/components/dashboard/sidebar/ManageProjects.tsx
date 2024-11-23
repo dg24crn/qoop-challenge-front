@@ -16,7 +16,7 @@ const ManageProjects: React.FC = () => {
         ...projects,
         { id: projects.length + 1, name: projectName },
       ]);
-      setProjectName(""); // Limpiar el campo después de agregar
+      setProjectName("");
     }
   };
 

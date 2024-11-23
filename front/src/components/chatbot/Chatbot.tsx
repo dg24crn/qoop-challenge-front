@@ -39,20 +39,20 @@ const Chatbot: React.FC = () => {
     <div
       className="shadow-md rounded-lg p-6 w-full max-w-md mx-auto"
       style={{
-        backgroundColor: "#1c2a3b", // Color oscuro de fondo
-        color: "#e1e3e6", // Color claro para texto
-        paddingTop: "8px", // Reducir espacio superior
+        backgroundColor: "#1c2a3b",
+        color: "#e1e3e6",
+        paddingTop: "8px",
       }}
     >
       {/* Título principal "Managé" */}
       <div
         className="text-center"
         style={{
-          fontSize: "24px", // Tamaño más grande para "Managé"
+          fontSize: "24px",
           fontWeight: "bold",
           color: "#e1e3e6",
-          marginTop: "0px", // Eliminar espacio superior adicional
-          marginBottom: "8px", // Separación menor respecto al subtítulo
+          marginTop: "0px",
+          marginBottom: "8px",
         }}
       >
         Managé
@@ -62,7 +62,7 @@ const Chatbot: React.FC = () => {
       <h1
         className="text-lg font-semibold mb-4 text-center"
         style={{
-          fontSize: "16px", // Tamaño más pequeño para "Chatbot"
+          fontSize: "16px",
           color: "#e1e3e6",
         }}
       >
@@ -77,8 +77,8 @@ const Chatbot: React.FC = () => {
               onClick={() => handleQuestionClick(item.question)}
               className="w-full text-left p-3 my-2 rounded-md"
               style={{
-                backgroundColor: "#35425e", // Color medio para botones
-                color: "#e1e3e6", // Texto claro
+                backgroundColor: "#35425e",
+                color: "#e1e3e6",
               }}
             >
               {item.question}
@@ -92,7 +92,7 @@ const Chatbot: React.FC = () => {
             onClick={handleBackClick}
             className="p-2 rounded-md"
             style={{
-              backgroundColor: "#586984", // Otro tono para el botón "Go Back"
+              backgroundColor: "#586984",
               color: "#e1e3e6",
             }}
           >

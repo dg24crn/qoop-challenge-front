@@ -41,7 +41,7 @@ const RegisterForm = () => {
       registerAlert()
       navigate("/login");
     } catch (error: any) {
-      console.error("Error al registrar:", error); // Log para depurar
+      console.error("Error al registrar:", error);
       setErrorMessage(
         error.response?.data?.detail || "An error occurred during registration."
       );

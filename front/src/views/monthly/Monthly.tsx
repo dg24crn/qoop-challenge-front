@@ -47,7 +47,7 @@ const Monthly: React.FC = () => {
     if (!user || !token) return;
 
     try {
-      // Llamar al endpoint para activar la suscripción mensual
+      //* Llamar al endpoint para activar la suscripción mensual
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/users/${
           user.id
@@ -56,7 +56,7 @@ const Monthly: React.FC = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Actualizar la sesión del usuario
+      //* Actualizar la sesión del usuario
       await checkSession();
       payAlert();
       navigate("/dashboard");

@@ -4,7 +4,7 @@ import { useAuth } from "../../../context/AuthContext";
 import Swal from "sweetalert2";
 
 interface NewProjectProps {
-  onProjectCreated: () => void; // Callback para cerrar el formulario
+  onProjectCreated: () => void;
 }
 
 const NewProject: React.FC<NewProjectProps> = ({ onProjectCreated }) => {
@@ -25,10 +25,9 @@ const NewProject: React.FC<NewProjectProps> = ({ onProjectCreated }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log("Project created:", response.data);
-      /* Add Sweet Alert */
       newProjectAlert()
-      setProjectName(""); // Limpiar el campo de texto
-      onProjectCreated(); // Cerrar el formulario
+      setProjectName("");
+      onProjectCreated();
     } catch (error) {
       console.error("Error creating project:", error);
       alert("Error creating project. Please try again.");

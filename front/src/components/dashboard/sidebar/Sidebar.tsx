@@ -8,7 +8,7 @@ import Members from "./Members";
 const Sidebar: React.FC = () => {
   const { user, logout, token } = useAuth();
   const [subscriptionExpiration, setSubscriptionExpiration] = useState<string | null>(null);
-  const [showCopied, setShowCopied] = useState(false); // Estado para mostrar el mensaje "Copied"
+  const [showCopied, setShowCopied] = useState(false);
 
   useEffect(() => {
     const fetchSubscriptionStatus = async () => {
@@ -34,15 +34,17 @@ const Sidebar: React.FC = () => {
     }
   }, [user, token]);
 
-  // Función para copiar el ID al portapapeles
   const handleCopyID = () => {
     if (user?.id) {
-      navigator.clipboard.writeText(user.id.toString()).then(() => {
-        setShowCopied(true); // Mostrar el mensaje "Copied"
-        setTimeout(() => setShowCopied(false), 2000); // Ocultar después de 2 segundos
-      }).catch(err => {
-        console.error("Error al copiar el ID:", err);
-      });
+      navigator.clipboard
+        .writeText(user.id.toString())
+        .then(() => {
+          setShowCopied(true);
+          setTimeout(() => setShowCopied(false), 2000);
+        })
+        .catch((err) => {
+          console.error("Error al copiar el ID:", err);
+        });
     }
   };
 
