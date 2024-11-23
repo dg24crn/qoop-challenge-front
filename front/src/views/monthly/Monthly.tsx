@@ -35,7 +35,7 @@ const Monthly: React.FC = () => {
     try {
       // Llamar al endpoint para activar la suscripción mensual
       await axios.post(
-        `http://127.0.0.1:8000/users/${user.id}/subscribe/monthly`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${user.id}/subscribe/monthly`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

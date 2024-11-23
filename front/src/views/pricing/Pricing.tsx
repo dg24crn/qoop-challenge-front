@@ -16,7 +16,7 @@ const Pricing = () => {
 
       // Llamar al endpoint para cambiar la suscripción a free
       await axios.post(
-        `http://127.0.0.1:8000/users/${user.id}/unsubscribe`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${user.id}/unsubscribe`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

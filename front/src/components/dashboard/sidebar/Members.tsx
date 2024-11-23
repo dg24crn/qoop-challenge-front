@@ -36,7 +36,7 @@ const Members: React.FC = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/teams/by_user/${user?.id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/teams/by_user/${user?.id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

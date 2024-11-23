@@ -35,7 +35,7 @@ const Annually: React.FC = () => {
     try {
       // Llamar al endpoint para activar la suscripción anual
       await axios.post(
-        `http://127.0.0.1:8000/users/${user.id}/subscribe/annually`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${user.id}/subscribe/annually`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

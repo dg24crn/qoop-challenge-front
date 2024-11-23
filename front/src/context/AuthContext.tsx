@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const checkSession = async () => {
     if (!token) return; // Si no hay token, salir
     try {
-      const response = await axios.get("http://127.0.0.1:8000/users/me", {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser({

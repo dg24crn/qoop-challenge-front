@@ -15,7 +15,7 @@ const Sidebar: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/users/${user.id}/subscription-status`,
+          `${import.meta.env.VITE_BACKEND_URL}/users/${user.id}/subscription-status`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

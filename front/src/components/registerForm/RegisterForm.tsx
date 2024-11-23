@@ -23,19 +23,20 @@ const RegisterForm = () => {
     e.preventDefault();
     setErrorMessage(null);
     setLoading(true);
-
+    
     try {
       // Llamada al endpoint de registro
-      await axios.post("http://127.0.0.1:8000/users", {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/users`, {
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
         password: formData.password,
       });
-
+  
       // Redirigir al login tras un registro exitoso
       navigate("/login");
     } catch (error: any) {
+      console.error("Error al registrar:", error); // Log para depurar
       setErrorMessage(
         error.response?.data?.detail || "An error occurred during registration."
       );

@@ -15,7 +15,7 @@ const NewProject: React.FC<NewProjectProps> = ({ onProjectCreated }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/projects/",
+        `${import.meta.env.VITE_BACKEND_URL}/projects/`,
         { name: projectName, owner_id: user.id },
         { headers: { Authorization: `Bearer ${token}` } }
       );

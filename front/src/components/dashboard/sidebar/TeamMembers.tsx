@@ -41,7 +41,7 @@ const TeamMembers: React.FC = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/teams/by_user/${user?.id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/teams/by_user/${user?.id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -63,7 +63,7 @@ const TeamMembers: React.FC = () => {
     setSuccessMessage(null);
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/teams/`,
+        `${import.meta.env.VITE_BACKEND_URL}/teams/`,
         {
           name: teamName,
           owner_id: user?.id,
@@ -89,7 +89,7 @@ const TeamMembers: React.FC = () => {
     setSuccessMessage(null);
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/teams/${team.id}/add_member`,
+        `${import.meta.env.VITE_BACKEND_URL}/teams/${team.id}/add_member`,
         { user_id: Number(userIdToAdd) },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -120,7 +120,7 @@ const TeamMembers: React.FC = () => {
     setSuccessMessage(null);
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/teams/${team.id}/remove_member/${memberId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/teams/${team.id}/remove_member/${memberId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

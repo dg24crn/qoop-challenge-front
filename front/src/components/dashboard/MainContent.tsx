@@ -48,7 +48,7 @@ const MainContent: React.FC = () => {
   const fetchTeam = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/teams/by_user/${user?.id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/teams/by_user/${user?.id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -64,12 +64,12 @@ const MainContent: React.FC = () => {
     try {
       let response;
       if (user?.isSubscribed) {
-        response = await axios.get("http://127.0.0.1:8000/projects/", {
+        response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/projects/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else if (teamId) {
         response = await axios.get(
-          `http://127.0.0.1:8000/projects/team/${teamId}`,
+          `${import.meta.env.VITE_BACKEND_URL}/projects/team/${teamId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -93,7 +93,7 @@ const MainContent: React.FC = () => {
   const fetchProjectProgress = async (projectId: number) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/projects/${projectId}/progress`,
+        `${import.meta.env.VITE_BACKEND_URL}/projects/${projectId}/progress`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -109,7 +109,7 @@ const MainContent: React.FC = () => {
   const fetchProjectTasks = async (projectId: number) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/tasks?project_id=${projectId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/tasks?project_id=${projectId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -158,7 +158,7 @@ const MainContent: React.FC = () => {
 
     try {
       await axios.post(
-        "http://127.0.0.1:8000/tasks/",
+        `${import.meta.env.VITE_BACKEND_URL}/tasks/`,
         { name: newTaskName, project_id: selectedProject.id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -176,7 +176,7 @@ const MainContent: React.FC = () => {
     try {
       // Marcar la tarea como completada
       await axios.put(
-        `http://127.0.0.1:8000/tasks/${taskId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`,
         { completed: true },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -196,7 +196,7 @@ const MainContent: React.FC = () => {
 
     try {
       // Eliminar la tarea
-      await axios.delete(`http://127.0.0.1:8000/tasks/${taskId}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -236,7 +236,7 @@ const MainContent: React.FC = () => {
 
   const handleDeleteProject = async (projectId: number) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/projects/${projectId}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/projects/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProjects(projects.filter((project) => project.id !== projectId));
