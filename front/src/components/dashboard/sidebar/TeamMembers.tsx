@@ -146,13 +146,11 @@ const TeamMembers: React.FC = () => {
   }
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow">
+    <div className="h-48 overflow-y-auto bg-[#475569] rounded-lg p-4 shadow">
       {team ? (
         <>
           <h3 className="text-xl font-bold mb-4 text-center">{team.name}</h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Created At: {new Date(team.created_at).toLocaleDateString()}
-          </p>
+          <hr />
           <div className="mb-4">
             <h4 className="text-md font-semibold">Team Owner</h4>
             <p>
@@ -167,7 +165,7 @@ const TeamMembers: React.FC = () => {
                 value={userIdToAdd}
                 onChange={(e) => setUserIdToAdd(e.target.value)}
                 placeholder="Enter user ID"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+                className="flex-1 px-3 py-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
                 min="0"
               />
               <button
@@ -200,7 +198,7 @@ const TeamMembers: React.FC = () => {
                   </span>
                   <span className="mx-4">{member.email}</span>
                   {/*                   <button
-                    onClick={() => removeMember(member.id)} // Cambié member.user_id a member.id
+                    onClick={() => removeMember(member.id)}
                     className="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg"
                   >
                     REMOVE

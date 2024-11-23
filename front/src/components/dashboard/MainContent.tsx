@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import NewProject from "./sidebar/NewProject";
+import Swal from "sweetalert2";
 
 interface Task {
   id: number;
@@ -13,7 +14,7 @@ interface Project {
   id: number;
   name: string;
   owner_id: number;
-  progress?: string; // Progreso del proyecto como porcentaje
+  progress?: string;
   tasks?: Task[];
 }
 
@@ -24,27 +25,11 @@ const MainContent: React.FC = () => {
   const [newTaskName, setNewTaskName] = useState("");
   const [teamId, setTeamId] = useState<number | null>(null);
 
-  // Fetch all projects
-/*   const fetchProjects = async () => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/projects/", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  const projectDeletedAlert = () => {
+    Swal.fire(`Project deleted succesfully!`)
+  }
 
-      const projectsWithProgress = await Promise.all(
-        response.data.map(async (project: Project) => {
-          const progressResponse = await fetchProjectProgress(project.id);
-          return { ...project, progress: progressResponse.progress };
-        })
-      );
-
-      setProjects(projectsWithProgress);
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-    }
-  }; */
-
-  // Obtener el equipo del usuario
+  //* Obtener el equipo del usuario
   const fetchTeam = async () => {
     try {
       const response = await axios.get(
@@ -53,20 +38,23 @@ const MainContent: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setTeamId(response.data.team.id); // Guardar el team_id
+      setTeamId(response.data.team.id);
     } catch (error) {
       console.error("Error fetching team:", error);
     }
   };
 
-  // Obtener proyectos dependiendo del tipo de usuario
+  //* Obtener proyectos dependiendo del tipo de usuario
   const fetchProjects = async () => {
     try {
       let response;
       if (user?.isSubscribed) {
-        response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/projects/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/projects/`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
       } else if (teamId) {
         response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/projects/team/${teamId}`,
@@ -89,7 +77,7 @@ const MainContent: React.FC = () => {
     }
   };
 
-  // Fetch progress for a project
+  //* Obtener Progreso de Proyecto
   const fetchProjectProgress = async (projectId: number) => {
     try {
       const response = await axios.get(
@@ -101,11 +89,11 @@ const MainContent: React.FC = () => {
       return response.data;
     } catch (error) {
       console.error("Error fetching project progress:", error);
-      return { progress: "0%" }; // Retorna progreso cero si hay error
+      return { progress: "0%" };
     }
   };
 
-  // Fetch tasks for a specific project
+  //* Obtener tareas de un proyecto
   const fetchProjectTasks = async (projectId: number) => {
     try {
       const response = await axios.get(
@@ -115,7 +103,7 @@ const MainContent: React.FC = () => {
         }
       );
 
-      // Update tasks for the specific project
+      //* Actualizar tareas para el proyecto
       setProjects((prevProjects) =>
         prevProjects.map((project) =>
           project.id === projectId
@@ -124,7 +112,7 @@ const MainContent: React.FC = () => {
         )
       );
 
-      // Ensure selectedProject's tasks are updated if it matches
+      //* Comprobar tareas
       if (selectedProject?.id === projectId) {
         setSelectedProject((prev) =>
           prev ? { ...prev, tasks: response.data } : null
@@ -135,14 +123,14 @@ const MainContent: React.FC = () => {
     }
   };
 
-  // Initial fetch for projects
+  //* Fetch inicial
   useEffect(() => {
     if (token) {
       fetchProjects();
     }
   }, [token]);
 
-  // Load tasks when a project is selected
+  //* Cargar tareas
   useEffect(() => {
     if (selectedProject?.id) {
       fetchProjectTasks(selectedProject.id);
@@ -163,58 +151,61 @@ const MainContent: React.FC = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setNewTaskName("");
-      fetchProjectTasks(selectedProject.id); // Reload tasks after creating a new one
+      fetchProjectTasks(selectedProject.id);
     } catch (error) {
       console.error("Error creating task:", error);
       alert("Error creating task. Please try again.");
     }
   };
 
+  //* Completar tarea
   const handleCompleteTask = async (taskId: number) => {
     if (!selectedProject) return;
 
     try {
-      // Marcar la tarea como completada
       await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`,
         { completed: true },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Recargar las tareas del proyecto
+      //* Recargar las tareas del proyecto
       fetchProjectTasks(selectedProject.id);
 
-      // Actualizar el progreso del proyecto
+      //* Actualizar el progreso del proyecto
       updateProjectProgress(selectedProject.id);
     } catch (error) {
       console.error("Error completing task:", error);
     }
   };
 
+  //* Eliminar tarea
   const handleDeleteTask = async (taskId: number) => {
     if (!selectedProject) return;
 
     try {
-      // Eliminar la tarea
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-      // Recargar las tareas del proyecto
+      //* Recargar las tareas del proyecto
       fetchProjectTasks(selectedProject.id);
 
-      // Actualizar el progreso del proyecto
+      //* Actualizar el progreso del proyecto
       updateProjectProgress(selectedProject.id);
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
 
+  //* Actualizar el progreso del proyecto en el estado local
   const updateProjectProgress = async (projectId: number) => {
     try {
       const response = await fetchProjectProgress(projectId);
 
-      // Actualizar el progreso del proyecto en el estado local
       setProjects((prevProjects) =>
         prevProjects.map((project) =>
           project.id === projectId
@@ -223,7 +214,6 @@ const MainContent: React.FC = () => {
         )
       );
 
-      // Si el proyecto seleccionado coincide, actualiza también su progreso
       if (selectedProject?.id === projectId) {
         setSelectedProject((prev) =>
           prev ? { ...prev, progress: response.progress } : null
@@ -236,20 +226,24 @@ const MainContent: React.FC = () => {
 
   const handleDeleteProject = async (projectId: number) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/projects/${projectId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/projects/${projectId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setProjects(projects.filter((project) => project.id !== projectId));
       if (selectedProject?.id === projectId) {
         setSelectedProject(null);
       }
+      projectDeletedAlert()
     } catch (error) {
       console.error("Error deleting project:", error);
     }
   };
 
   const handleProjectCreated = () => {
-    fetchProjects(); // Reload projects after creating a new one
+    fetchProjects();
   };
 
   const handleBackToProjects = () => {
@@ -284,7 +278,6 @@ const MainContent: React.FC = () => {
               className="bg-white p-4 mb-4 rounded-lg shadow hover:bg-gray-100 transition relative"
             >
               <h2 className="text-lg font-semibold">{project.name}</h2>
-              <p className="text-sm text-gray-600 mt-1">Owner: {user?.email}</p>
 
               {/* Barra de Progreso */}
               <div className="mt-2">

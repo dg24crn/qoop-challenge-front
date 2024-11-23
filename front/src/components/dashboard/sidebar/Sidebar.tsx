@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
 import NasaApod from "../../apis/NasaApod";
-import TeamMembers from "./TeamMembers"; // Importar el nuevo componente
+import TeamMembers from "./TeamMembers";
 import Members from "./Members";
 
 const Sidebar: React.FC = () => {
@@ -34,48 +34,51 @@ const Sidebar: React.FC = () => {
   }, [user, token]);
 
   return (
-    <div className="w-1/4 bg-gradient-to-b from-[#f7f3e9] to-[#e8dfce] text-gray-800 flex flex-col p-6 shadow-lg">
+    <div className="w-1/4 bg-gradient-to-b from-[#1e293b] to-[#334155] text-white flex flex-col p-6 shadow-lg">
       {/* User Info */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Managé</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">Managé</h2>
         {user && (
-          <div className="bg-[#e4dbc5] rounded-lg p-4 shadow">
+          <div className="bg-[#475569] rounded-lg p-4 shadow">
             <p className="text-xl font-medium mb-1 text-center">
               {user.firstName} {user.lastName}
             </p>
-            <p className="text-sm text-gray-600 mb-1 text-center">{user.email}</p>
-            <p className="text-sm text-gray-600 mb-2 text-center">
+            <p className="text-sm text-gray-300 mb-1 text-center">{user.email}</p>
+            <p className="text-sm text-gray-300 mb-2 text-center">
               <strong>Your ID:</strong> {user.id}
             </p>
             <p
               className={`text-sm font-semibold text-center ${
-                user.isSubscribed ? "text-green-500" : "text-red-500"
+                user.isSubscribed ? "text-green-400" : "text-red-400"
               }`}
             >
               {user.isSubscribed ? "Active Subscription" : "No Subscription"}
             </p>
             {user.isSubscribed && subscriptionExpiration && (
-              <p className="text-xs text-gray-700 text-center">
-                Exp. Date:{" "}
-                {new Date(subscriptionExpiration).toLocaleDateString()}
+              <p className="text-xs text-gray-400 text-center">
+                Exp. Date: {new Date(subscriptionExpiration).toLocaleDateString()}
               </p>
             )}
           </div>
         )}
       </div>
 
-      {/*  Subscribed User */}
-      <div className="flex flex-col gap-4">
-        {user?.isSubscribed && <TeamMembers />} {/* Renderizar TeamMembers aquí */}
-      </div>
+      {/* Subscribed User */}
+      {user?.isSubscribed && (
+        <div className="bg-[#475569] rounded-lg h-48">
+          <TeamMembers />
+        </div>
+      )}
 
       {/* Not Subscribed User */}
-      <div className="flex flex-col gap-4">
-        {!user?.isSubscribed && <Members />}
-      </div>
+      {!user?.isSubscribed && (
+        <div className="bg-[#475569] rounded-lg h-48">
+          <Members />
+        </div>
+      )}
 
       {/* API for Subscribed Users */}
-      <div className="mt-auto border border-red-200 rounded-xl text-center h-64 relative overflow-hidden">
+      <div className="mt-auto border border-gray-500 rounded-xl text-center h-64 relative overflow-hidden bg-[#475569]">
         {user?.isSubscribed ? (
           <NasaApod />
         ) : (
@@ -98,7 +101,7 @@ const Sidebar: React.FC = () => {
       <div className="mt-auto">
         <a
           href="/pricing"
-          className="block text-center text-black underline mb-4"
+          className="block text-center text-white underline mb-4"
         >
           {user?.isSubscribed ? "Manage Subscription" : "Get Premium"}
         </a>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,9 @@ const RegisterForm = () => {
     email: "",
     password: "",
   });
+  const registerAlert = () => {
+    Swal.fire("Account registered succesfully!")
+  }
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,6 +38,7 @@ const RegisterForm = () => {
       });
   
       // Redirigir al login tras un registro exitoso
+      registerAlert()
       navigate("/login");
     } catch (error: any) {
       console.error("Error al registrar:", error); // Log para depurar

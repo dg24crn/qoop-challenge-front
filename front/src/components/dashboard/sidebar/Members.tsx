@@ -71,13 +71,11 @@ const Members: React.FC = () => {
   }
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow">
+    <div className="h-48 overflow-y-auto bg-[#475569] rounded-lg p-4 shadow">
       {team ? (
         <>
-          <h3 className="text-xl font-bold mb-2">{team.name}</h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Created At: {new Date(team.created_at).toLocaleDateString()}
-          </p>
+          <h3 className="text-xl text-center font-bold mb-2">{team.name}</h3>
+          <hr />
           <div className="mb-4">
             <h4 className="text-md font-semibold">Team Owner</h4>
             <p>

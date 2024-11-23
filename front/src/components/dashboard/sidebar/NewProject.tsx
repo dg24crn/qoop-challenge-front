@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
+import Swal from "sweetalert2";
 
 interface NewProjectProps {
   onProjectCreated: () => void; // Callback para cerrar el formulario
@@ -9,6 +10,10 @@ interface NewProjectProps {
 const NewProject: React.FC<NewProjectProps> = ({ onProjectCreated }) => {
   const [projectName, setProjectName] = useState("");
   const { user, token } = useAuth();
+  
+  const newProjectAlert = () => {
+    Swal.fire(`Project ${projectName} has been created!`)
+  }
 
   const handleCreateProject = async () => {
     if (!user || !token) return;
@@ -20,7 +25,8 @@ const NewProject: React.FC<NewProjectProps> = ({ onProjectCreated }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log("Project created:", response.data);
-      alert("Project created successfully!");
+      /* Add Sweet Alert */
+      newProjectAlert()
       setProjectName(""); // Limpiar el campo de texto
       onProjectCreated(); // Cerrar el formulario
     } catch (error) {

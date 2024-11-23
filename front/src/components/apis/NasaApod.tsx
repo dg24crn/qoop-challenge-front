@@ -44,10 +44,8 @@ const NasaApod: React.FC = () => {
   }
 
   return (
-    <div className="p-2 border rounded-lg">
-      <h2 className="text-lg font-semibold text-gray-800 text-center mb-4">
-        {data.title}
-      </h2>
+    <div className="p-4 bg-[#1e293b] rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold text-white text-center mb-4">{data.title}</h2>
       {data.media_type === "image" ? (
         <img
           src={data.url}
