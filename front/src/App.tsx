@@ -27,19 +27,43 @@ function App() {
         <Route path="/sandbox" element={<Sandbox />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/pricing/payment" element={<Payment />} />
-        <Route path="/pricing/payment/monthly" element={<Monthly />} />
-        <Route path="/pricing/payment/annually" element={<Annually />} />
+        <Route
+          path="/pricing"
+          element={
+            <ProtectedRoute>
+              <Pricing />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pricing/payment"
+          element={
+            <ProtectedRoute>
+              <Payment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pricing/payment/monthly"
+          element={
+            <ProtectedRoute>
+              <Monthly />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pricing/payment/annually"
+          element={
+            <ProtectedRoute>
+              <Annually />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
-              <Pricing/>
-              <Payment/>
-              <Monthly/>
-              <Annually/>
             </ProtectedRoute>
           }
         />
