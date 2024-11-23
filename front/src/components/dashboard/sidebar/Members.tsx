@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
+import Loading from "../../loading/Loading";
 
 interface Team {
   id: number;
@@ -63,7 +64,7 @@ const Members: React.FC = () => {
   }, [user, token]);
 
   if (loading) {
-    return <p>Loading team data...</p>;
+    return <Loading/>;
   }
 
   if (error) {

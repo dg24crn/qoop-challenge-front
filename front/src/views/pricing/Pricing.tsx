@@ -1,10 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import Swal from "sweetalert2";
 
 const Pricing = () => {
   const navigate = useNavigate();
   const { user, token, checkSession } = useAuth();
+  const downgradeAlert = () => {
+    Swal.fire("Subscription downgraded to Free successfully.")
+  }
 
   const handleBackToDashboard = () => {
     navigate("/dashboard");
@@ -23,7 +27,8 @@ const Pricing = () => {
 
       // Actualizar los datos del usuario
       await checkSession();
-      alert("Subscription downgraded to Free successfully.");
+      downgradeAlert()
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error downgrading subscription:", error);
       alert("There was an error downgrading your subscription.");
@@ -77,7 +82,7 @@ const Pricing = () => {
           </p>
           <ul className="mb-6 space-y-2 text-sm text-gray-700">
             <li>✔️ Create and manage projects</li>
-            <li>✔️ Assign tasks to team members</li>
+            <li>✔️ Add tasks to projects</li>
             <li>✔️ Access external API</li>
           </ul>
           {user?.isSubscribed ? (

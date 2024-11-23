@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import NewProject from "./sidebar/NewProject";
 import Swal from "sweetalert2";
+import ChatButton from "../chatbutton/Chatbutton";
 
 interface Task {
   id: number;
@@ -412,6 +413,7 @@ const MainContent: React.FC = () => {
           </button>
         </div>
       )}
+      <ChatButton/>
     </div>
   );
 };

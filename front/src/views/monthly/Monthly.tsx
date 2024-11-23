@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Monthly: React.FC = () => {
   const { user, token, checkSession } = useAuth();
@@ -12,6 +13,14 @@ const Monthly: React.FC = () => {
   const [expiryYear, setExpiryYear] = useState("");
   const [cvv, setCvv] = useState("");
   const [isValid, setIsValid] = useState(false);
+  const payAlert = () => {
+    Swal.fire(
+      "Payment successful! You are now subscribed to the Monthly Plan."
+    );
+  };
+  const payErrorAlert = () => {
+    Swal.fire("There was an error processing your payment. Please try again.");
+  };
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "");
@@ -22,11 +31,16 @@ const Monthly: React.FC = () => {
   const validateCard = () => {
     const isCardNumberValid = cardNumber.replace(/\s/g, "").length === 16;
     const isExpiryMonthValid =
-      expiryMonth.length === 2 && Number(expiryMonth) >= 1 && Number(expiryMonth) <= 12;
-    const isExpiryYearValid = expiryYear.length === 2 && /^\d{2}$/.test(expiryYear);
+      expiryMonth.length === 2 &&
+      Number(expiryMonth) >= 1 &&
+      Number(expiryMonth) <= 12;
+    const isExpiryYearValid =
+      expiryYear.length === 2 && /^\d{2}$/.test(expiryYear);
     const isCvvValid = cvv.length === 3 && /^\d+$/.test(cvv);
 
-    setIsValid(isCardNumberValid && isExpiryMonthValid && isExpiryYearValid && isCvvValid);
+    setIsValid(
+      isCardNumberValid && isExpiryMonthValid && isExpiryYearValid && isCvvValid
+    );
   };
 
   const handlePayNow = async () => {
@@ -35,41 +49,53 @@ const Monthly: React.FC = () => {
     try {
       // Llamar al endpoint para activar la suscripción mensual
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/users/${user.id}/subscribe/monthly`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${
+          user.id
+        }/subscribe/monthly`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       // Actualizar la sesión del usuario
       await checkSession();
-      alert("Payment successful! You are now subscribed to the Monthly Plan.");
+      payAlert();
       navigate("/dashboard");
     } catch (error) {
       console.error("Error during payment:", error);
-      alert("There was an error processing your payment. Please try again.");
+      payErrorAlert()
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Premium Plan - Monthly</h1>
+      <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
+        Premium Plan - Monthly
+      </h1>
 
       <div className="flex flex-col md:flex-row gap-8">
         {/* Información del plan */}
         <div className="bg-white shadow-lg rounded-lg p-6 w-96">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">PREMIUM</h2>
-          <p className="text-gray-600 text-center mb-6">Full access to all platform features.</p>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+            PREMIUM
+          </h2>
+          <p className="text-gray-600 text-center mb-6">
+            Full access to all platform features.
+          </p>
           <ul className="mb-6 space-y-2 text-sm text-gray-700">
             <li>✔️ Create and manage projects</li>
             <li>✔️ Assign tasks to team members</li>
             <li>✔️ Access external API</li>
           </ul>
-          <p className="text-center text-2xl font-bold text-blue-600">$4.99 / month</p>
+          <p className="text-center text-2xl font-bold text-blue-600">
+            $4.99 / month
+          </p>
         </div>
 
         {/* Formulario de pago */}
         <div className="bg-white shadow-lg rounded-lg p-6 w-96">
-          <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Payment Details</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+            Payment Details
+          </h3>
           <form className="flex flex-col gap-4">
             <div>
               <label htmlFor="cardNumber" className="block text-gray-700 mb-2">
@@ -88,7 +114,10 @@ const Monthly: React.FC = () => {
             </div>
             <div className="flex gap-4">
               <div>
-                <label htmlFor="expiryMonth" className="block text-gray-700 mb-2">
+                <label
+                  htmlFor="expiryMonth"
+                  className="block text-gray-700 mb-2"
+                >
                   Expiry Month
                 </label>
                 <input
@@ -103,7 +132,10 @@ const Monthly: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="expiryYear" className="block text-gray-700 mb-2">
+                <label
+                  htmlFor="expiryYear"
+                  className="block text-gray-700 mb-2"
+                >
                   Expiry Year
                 </label>
                 <input
@@ -138,7 +170,9 @@ const Monthly: React.FC = () => {
               onClick={handlePayNow}
               disabled={!isValid}
               className={`w-full py-2 mt-4 text-white rounded-lg ${
-                isValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
+                isValid
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : "bg-gray-400 cursor-not-allowed"
               }`}
             >
               Pay Now

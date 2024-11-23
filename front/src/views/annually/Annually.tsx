@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Annually: React.FC = () => {
   const { user, token, checkSession } = useAuth();
@@ -12,6 +13,12 @@ const Annually: React.FC = () => {
   const [expiryYear, setExpiryYear] = useState("");
   const [cvv, setCvv] = useState("");
   const [isValid, setIsValid] = useState(false);
+  const payAlert = () => {
+    Swal.fire("Payment successful! You are now subscribed to the Annual Plan.")
+  }
+  const payErrorAlert = () => {
+    Swal.fire("There was an error processing your payment. Please try again.")
+  }
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "");
@@ -42,11 +49,11 @@ const Annually: React.FC = () => {
 
       // Actualizar la sesión del usuario
       await checkSession();
-      alert("Payment successful! You are now subscribed to the Annual Plan.");
+      payAlert()
       navigate("/dashboard");
     } catch (error) {
       console.error("Error during payment:", error);
-      alert("There was an error processing your payment. Please try again.");
+      payErrorAlert()
     }
   };
 

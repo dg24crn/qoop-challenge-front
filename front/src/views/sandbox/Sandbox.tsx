@@ -1,13 +1,14 @@
-import MainContent from "../../components/dashboard/MainContent"
-import ProjectDetails from "../project/ProjectDetails"
+import ChatButton from "../../components/chatbutton/Chatbutton";
 
 const Sandbox = () => {
   return (
     <div>
-        <h1 className="border text-4xl text-center p-4">This is the Sandbox View</h1>
-        console.log(import.meta.env.VITE_BACKEND_URL)
+      <h1 className="border text-4xl text-center p-4">
+        This is the Sandbox View
+      </h1>
+      <ChatButton/>
     </div>
-  )
-}
+  );
+};
 
-export default Sandbox
+export default Sandbox;

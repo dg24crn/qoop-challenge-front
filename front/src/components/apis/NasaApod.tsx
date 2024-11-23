@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Loading from "../loading/Loading";
 
 interface ApodData {
   title: string;
@@ -32,7 +33,7 @@ const NasaApod: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <p className="text-center text-gray-500">Loading NASA APOD...</p>;
+    return <Loading/>;
   }
 
   if (error) {

@@ -8,6 +8,7 @@ import Members from "./Members";
 const Sidebar: React.FC = () => {
   const { user, logout, token } = useAuth();
   const [subscriptionExpiration, setSubscriptionExpiration] = useState<string | null>(null);
+  const [showCopied, setShowCopied] = useState(false); // Estado para mostrar el mensaje "Copied"
 
   useEffect(() => {
     const fetchSubscriptionStatus = async () => {
@@ -33,6 +34,18 @@ const Sidebar: React.FC = () => {
     }
   }, [user, token]);
 
+  // Función para copiar el ID al portapapeles
+  const handleCopyID = () => {
+    if (user?.id) {
+      navigator.clipboard.writeText(user.id.toString()).then(() => {
+        setShowCopied(true); // Mostrar el mensaje "Copied"
+        setTimeout(() => setShowCopied(false), 2000); // Ocultar después de 2 segundos
+      }).catch(err => {
+        console.error("Error al copiar el ID:", err);
+      });
+    }
+  };
+
   return (
     <div className="w-1/4 bg-gradient-to-b from-[#1e293b] to-[#334155] text-white flex flex-col p-6 shadow-lg">
       {/* User Info */}
@@ -44,9 +57,23 @@ const Sidebar: React.FC = () => {
               {user.firstName} {user.lastName}
             </p>
             <p className="text-sm text-gray-300 mb-1 text-center">{user.email}</p>
-            <p className="text-sm text-gray-300 mb-2 text-center">
+            <div className="text-sm text-gray-300 mb-2 text-center flex items-center justify-center relative">
               <strong>Your ID:</strong> {user.id}
-            </p>
+              <div className="relative ml-2">
+                <button
+                  onClick={handleCopyID}
+                  className="p-1 bg-gray-700 text-white rounded hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-500"
+                  title="Copy ID"
+                >
+                  🖹
+                </button>
+                {showCopied && (
+                  <span className="absolute top-1/2 right-full translate-x-[110%] transform -translate-y-1/2 bg-blue-500 text-white text-xs rounded px-2 py-1 shadow">
+                    Copied
+                  </span>
+                )}
+              </div>
+            </div>
             <p
               className={`text-sm font-semibold text-center ${
                 user.isSubscribed ? "text-green-400" : "text-red-400"

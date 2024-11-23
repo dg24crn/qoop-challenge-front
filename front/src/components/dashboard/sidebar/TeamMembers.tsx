@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
+import Loading from "../../loading/Loading";
 
 interface Member {
   id: number;
@@ -142,7 +143,7 @@ const TeamMembers: React.FC = () => {
   }, [user, token]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading/>;
   }
 
   return (
