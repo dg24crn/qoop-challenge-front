@@ -22,13 +22,59 @@ const MainContent: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [newTaskName, setNewTaskName] = useState("");
+  const [teamId, setTeamId] = useState<number | null>(null);
 
   // Fetch all projects
-  const fetchProjects = async () => {
+/*   const fetchProjects = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/projects/", {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      const projectsWithProgress = await Promise.all(
+        response.data.map(async (project: Project) => {
+          const progressResponse = await fetchProjectProgress(project.id);
+          return { ...project, progress: progressResponse.progress };
+        })
+      );
+
+      setProjects(projectsWithProgress);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
+  }; */
+
+  // Obtener el equipo del usuario
+  const fetchTeam = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/teams/by_user/${user?.id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setTeamId(response.data.team.id); // Guardar el team_id
+    } catch (error) {
+      console.error("Error fetching team:", error);
+    }
+  };
+
+  // Obtener proyectos dependiendo del tipo de usuario
+  const fetchProjects = async () => {
+    try {
+      let response;
+      if (user?.isSubscribed) {
+        response = await axios.get("http://127.0.0.1:8000/projects/", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } else if (teamId) {
+        response = await axios.get(
+          `http://127.0.0.1:8000/projects/team/${teamId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      }
 
       const projectsWithProgress = await Promise.all(
         response.data.map(async (project: Project) => {
@@ -209,6 +255,18 @@ const MainContent: React.FC = () => {
   const handleBackToProjects = () => {
     setSelectedProject(null);
   };
+
+  useEffect(() => {
+    if (token && !user?.isSubscribed) {
+      fetchTeam();
+    }
+  }, [token, user?.isSubscribed]);
+
+  useEffect(() => {
+    if (token) {
+      fetchProjects();
+    }
+  }, [token, teamId]);
 
   return (
     <div className="flex-1 bg-gray-50 p-8">
