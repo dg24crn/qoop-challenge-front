@@ -27,8 +27,8 @@ const MainContent: React.FC = () => {
   const [teamId, setTeamId] = useState<number | null>(null);
 
   const projectDeletedAlert = () => {
-    Swal.fire(`Project deleted succesfully!`)
-  }
+    Swal.fire(`Project deleted succesfully!`);
+  };
 
   //* Obtener el equipo del usuario
   const fetchTeam = async () => {
@@ -237,7 +237,7 @@ const MainContent: React.FC = () => {
       if (selectedProject?.id === projectId) {
         setSelectedProject(null);
       }
-      projectDeletedAlert()
+      projectDeletedAlert();
     } catch (error) {
       console.error("Error deleting project:", error);
     }
@@ -268,47 +268,55 @@ const MainContent: React.FC = () => {
       {!selectedProject ? (
         <div>
           <h1 className="text-2xl font-bold mb-4">Projects</h1>
+          <hr />
+          <br />
           <div className="mb-8">
             {user?.isSubscribed ? (
               <NewProject onProjectCreated={handleProjectCreated} />
             ) : null}
           </div>
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              className="bg-white p-4 mb-4 rounded-lg shadow hover:bg-gray-100 transition relative"
-            >
-              <h2 className="text-lg font-semibold">{project.name}</h2>
-
-              {/* Barra de Progreso */}
-              <div className="mt-2">
-                <div className="w-full bg-gray-300 rounded-full h-4">
-                  <div
-                    className="bg-blue-600 h-4 rounded-full"
-                    style={{ width: project.progress }}
-                  ></div>
-                </div>
-                <p className="text-sm text-gray-600 mt-1">
-                  Progress: {project.progress}
-                </p>
-              </div>
-
-              <button
-                onClick={() => handleSelectProject(project)}
-                className="mt-2 bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-500 transition"
+          {projects.length > 0 ? (
+            projects.map((project) => (
+              <div
+                key={project.id}
+                className="bg-white p-4 mb-4 rounded-lg shadow hover:bg-gray-100 transition relative"
               >
-                View Project
-              </button>
-              {user?.isSubscribed ? (
+                <h2 className="text-lg font-semibold">{project.name}</h2>
+
+                {/* Barra de Progreso */}
+                <div className="mt-2">
+                  <div className="w-full bg-gray-300 rounded-full h-4">
+                    <div
+                      className="bg-blue-600 h-4 rounded-full"
+                      style={{ width: project.progress }}
+                    ></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Progress: {project.progress}
+                  </p>
+                </div>
+
                 <button
-                  onClick={() => handleDeleteProject(project.id)}
-                  className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-600 transition"
+                  onClick={() => handleSelectProject(project)}
+                  className="mt-2 bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-500 transition"
                 >
-                  Delete
+                  View Project
                 </button>
-              ) : null}
+                {user?.isSubscribed ? (
+                  <button
+                    onClick={() => handleDeleteProject(project.id)}
+                    className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-600 transition"
+                  >
+                    Delete
+                  </button>
+                ) : null}
+              </div>
+            ))
+          ) : (
+            <div className="bg-gray-100 p-4 rounded-lg text-center text-gray-700">
+              No projects available.
             </div>
-          ))}
+          )}
         </div>
       ) : (
         <div>
@@ -413,7 +421,7 @@ const MainContent: React.FC = () => {
           </button>
         </div>
       )}
-      <ChatButton/>
+      <ChatButton />
     </div>
   );
 };
