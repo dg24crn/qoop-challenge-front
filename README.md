@@ -13,7 +13,6 @@ Managé is a project management platform designed to help you organize tasks, co
   - View information about team members.
 - **Subscriptions**:
   - Additional features available for users with active subscriptions.
-  - Premium subscription management options.
 - **NASA API Integration**:
   - Subscribed users can enjoy daily content from NASA's APOD API.
 
